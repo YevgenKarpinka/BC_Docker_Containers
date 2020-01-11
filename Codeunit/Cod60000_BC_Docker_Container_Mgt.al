@@ -110,5 +110,5 @@ codeunit 60000 "BC Docker Container Mgt."
         lblName: Label 'name';
         lblTag: Label 'tags';
         RecordsXofYMsg: TextConst ENU = 'Records: %1 of %2', RUS = 'Запись: %1 из %2';
-        ApplyingURLMsg: TextConst ENU = 'Applying URL %1', RUS = 'Применяется URL %1';
+        ApplyingURLMsg: TextConst ENU = 'Rading from URL %1', RUS = 'Применяется URL %1';
 }
