@@ -16,7 +16,9 @@ Important word in that title: “Docker Hub”.
 Not too long ago, Freddy introduced images on “Azure Container Registry”, “Microsoft syndicates container catalog”, “Microsoft Container Registry” or however you want to call “mcr.microsoft.com” 😉 – which makes very much sense (just think “Azure Container Service” in the future) – by creating repos like:
 
 mcr.microsoft.com/businesscentral/onprem
+
 mcr.microsoft.com/businesscentral/bcsandbox
+
 Thing was, I was not able to get to a list of tags for those repos. So regarding tags, it was back to square one: figuring it out the tags by trial and error (at least, that’s what I did ;-)).
 
 Until today. I saw a tweet from Tobias Fenster, who announced that Microsoft now supports the so-called “Hub Catalog API” (whatever that is, but it sounds good). Back in business! And we don’t even need PowerShell for this … these URLs get you straight to a JSON with all the tags:
