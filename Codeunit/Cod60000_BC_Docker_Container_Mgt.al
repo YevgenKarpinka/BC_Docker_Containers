@@ -88,7 +88,7 @@ codeunit 60000 "BC Docker Container Mgt."
         RecordCount := _jsonArray.Count;
 
         ConfigProgressBarRecord.Init(
-          RecordCount, Counter, STRSUBSTNO(ApplyingURLMsg, _Name));
+          RecordCount, Counter, STRSUBSTNO(ReadingURLMsg, _Name));
 
         foreach _jsonToken in _jsonArray do begin
             _Tag := _jsonToken.AsValue().AsText();
@@ -110,5 +110,5 @@ codeunit 60000 "BC Docker Container Mgt."
         lblName: Label 'name';
         lblTag: Label 'tags';
         RecordsXofYMsg: TextConst ENU = 'Records: %1 of %2', RUS = 'Запись: %1 из %2';
-        ApplyingURLMsg: TextConst ENU = 'Rading from URL %1', RUS = 'Применяется URL %1';
+        ReadingURLMsg: TextConst ENU = 'Rading from URL %1', RUS = 'Применяется URL %1';
 }
