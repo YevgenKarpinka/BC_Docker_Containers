@@ -2,6 +2,7 @@ table 60001 "BC URL"
 {
     DataClassification = ToBeClassified;
     LookupPageId = "BC URL List";
+    Permissions = tabledata "BC Docker Container" = rd;
 
     fields
     {
@@ -50,8 +51,12 @@ table 60001 "BC URL"
     end;
 
     trigger OnDelete()
+    var
+        BC_Dockers: Record "BC Docker Container";
     begin
-
+        BC_Dockers.SetRange(Name, Name);
+        if BC_Dockers.IsEmpty then exit;
+        BC_Dockers.DeleteAll(true);
     end;
 
     trigger OnRename()

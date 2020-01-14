@@ -1,13 +1,16 @@
 codeunit 60000 "BC Docker Container Mgt."
 {
+    Permissions = tabledata "BC Docker Container" = rimd, tabledata "BC URL" = rimd;
+
     trigger OnRun()
     begin
 
     end;
 
-    procedure CreateBCDockerContainer(_Name: Text[50]; _Tag: Text[50])
+    procedure CreateBCDockerContainer(_Name: Text[50]; _Tag: Text[50]; _URL: Text[250])
     var
         BCDockerContainer: Record "BC Docker Container";
+        BC_URLs: Record "BC URL";
     begin
         with BCDockerContainer do begin
             SetCurrentKey(Name, Tag);
@@ -19,6 +22,13 @@ codeunit 60000 "BC Docker Container Mgt."
                 Tag := _Tag;
                 Insert();
             end;
+        end;
+        with BC_URLs do begin
+            SetCurrentKey(URL);
+            SetRange(URL, _URL);
+            if FindFirst() and (Name = '') then exit;
+            Name := _Name;
+            Modify();
         end;
     end;
 
@@ -32,7 +42,7 @@ codeunit 60000 "BC Docker Container Mgt."
         JSObject: JsonObject;
         errMessage: Text;
         errExceptionMessage: Text;
-        txtRequestMessageMethod: Label 'GET';
+
     begin
         RequestMessage.Method := txtRequestMessageMethod;
         RequestMessage.SetRequestUri(_URL);
@@ -79,7 +89,8 @@ codeunit 60000 "BC Docker Container Mgt."
         _jsonText := GetBCDockerContainer(_URL);
         _jsonObject.ReadFrom(_jsonText);
 
-        _BCDC.SetRange(Name, _BCName);
+        if _BCName <> '' then
+            _BCDC.SetRange(Name, _BCName);
         _BCDC.DeleteAll();
 
         _Name := GetJSToken(_jsonObject, lblName).AsValue().AsText();
@@ -92,7 +103,7 @@ codeunit 60000 "BC Docker Container Mgt."
 
         foreach _jsonToken in _jsonArray do begin
             _Tag := _jsonToken.AsValue().AsText();
-            CreateBCDockerContainer(_Name, _Tag);
+            CreateBCDockerContainer(_Name, _Tag, _URL);
             Counter += 1;
             ConfigProgressBarRecord.Update(STRSUBSTNO(RecordsXofYMsg, Counter, RecordCount));
         end;
@@ -109,6 +120,7 @@ codeunit 60000 "BC Docker Container Mgt."
         Window: Dialog;
         lblName: Label 'name';
         lblTag: Label 'tags';
+        txtRequestMessageMethod: Label 'GET';
         RecordsXofYMsg: TextConst ENU = 'Records: %1 of %2', RUS = 'Запись: %1 из %2';
         ReadingURLMsg: TextConst ENU = 'Rading from URL %1', RUS = 'Применяется URL %1';
 }
