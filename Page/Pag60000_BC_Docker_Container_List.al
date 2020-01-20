@@ -5,6 +5,7 @@ page 60000 "BC Docker Container List"
     UsageCategory = Administration;
     SourceTable = "BC Docker Container";
     SourceTableView = sorting(Tag) order(ascending);
+    Editable = false;
 
     layout
     {
@@ -12,11 +13,14 @@ page 60000 "BC Docker Container List"
         {
             group(GroupName)
             {
+                CaptionML = ENU = 'BC Docker Containers List';
+
                 field("BC Docker Container Name"; BCDockerContainerName)
                 {
                     ApplicationArea = All;
                     TableRelation = "BC URL";
                     CaptionML = ENU = 'BC Docker Container Name';
+                    Visible = false; // just comment
 
                     trigger OnLookup(var _Text: Text): Boolean
                     var
@@ -57,6 +61,7 @@ page 60000 "BC Docker Container List"
                 field(ID; ID)
                 {
                     ApplicationArea = All;
+                    Visible = false;
 
                 }
                 field(Name; Name)
@@ -105,7 +110,7 @@ page 60000 "BC Docker Container List"
 
                     if _bcURL.FindSet(false, false) then
                         repeat
-                            _bcDCMgt.CreateBCDC(_bcURL.Name, _bcURL.URL);
+                            _bcDCMgt.CreateBCDC(_bcURL.URL);
                         until _bcURL.Next() = 0;
 
                     Message('Done!');

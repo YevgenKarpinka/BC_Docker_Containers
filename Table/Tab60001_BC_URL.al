@@ -16,7 +16,6 @@ table 60001 "BC URL"
         field(2; Name; Text[50])
         {
             DataClassification = ToBeClassified;
-            NotBlank = true;
         }
         field(3; URL; Text[250])
         {

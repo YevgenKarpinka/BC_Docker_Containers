@@ -13,20 +13,16 @@ codeunit 60000 "BC Docker Container Mgt."
         BC_URLs: Record "BC URL";
     begin
         with BCDockerContainer do begin
-            SetCurrentKey(Name, Tag);
-            SetRange(Name, _Name);
-            SetRange(Tag, _Tag);
-            if IsEmpty() then begin
-                Init();
-                Name := _Name;
-                Tag := _Tag;
-                Insert();
-            end;
+            Init();
+            Name := _Name;
+            Tag := _Tag;
+            if Insert() then;
         end;
         with BC_URLs do begin
-            SetCurrentKey(URL);
+            SetCurrentKey(Name, URL);
             SetRange(URL, _URL);
-            if FindFirst() and (Name = '') then exit;
+            SetFilter(Name, '<>%1', '');
+            if FindFirst() then exit;
             Name := _Name;
             Modify();
         end;
@@ -74,7 +70,7 @@ codeunit 60000 "BC Docker Container Mgt."
             Error('Could not find a token with path %1', Path);
     end;
 
-    procedure CreateBCDC(_BCName: Text[50]; _URL: Text[250]): Boolean
+    procedure CreateBCDC(_URL: Text[250]): Boolean
     var
         _jsonObject: JsonObject;
         _jsonArray: JsonArray;
@@ -88,10 +84,6 @@ codeunit 60000 "BC Docker Container Mgt."
     begin
         _jsonText := GetBCDockerContainer(_URL);
         _jsonObject.ReadFrom(_jsonText);
-
-        if _BCName <> '' then
-            _BCDC.SetRange(Name, _BCName);
-        _BCDC.DeleteAll();
 
         _Name := GetJSToken(_jsonObject, lblName).AsValue().AsText();
         _jsonArray := GetJSToken(_jsonObject, lblTag).AsArray();
@@ -122,5 +114,5 @@ codeunit 60000 "BC Docker Container Mgt."
         lblTag: Label 'tags';
         txtRequestMessageMethod: Label 'GET';
         RecordsXofYMsg: TextConst ENU = 'Records: %1 of %2', RUS = 'Запись: %1 из %2';
-        ReadingURLMsg: TextConst ENU = 'Rading from URL %1', RUS = 'Применяется URL %1';
+        ReadingURLMsg: TextConst ENU = 'Reading from URL %1', RUS = 'Применяется URL %1';
 }
